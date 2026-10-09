@@ -15,15 +15,22 @@ else
     SLICE="$XCF/ios-arm64"
 fi
 echo "Python : tranche $SLICE"
-if [ ! -d "$SLICE/lib" ]; then
-    echo "error: bibliothèque standard introuvable dans $SLICE (contenu :)"
-    ls -la "$SLICE" || true
-    exit 1
-fi
+ARCH=$(echo "${ARCHS:-arm64}" | awk '{print $1}')
 
 # 1. Bibliothèque standard
 mkdir -p "$APP/python/lib"
-rsync -a --delete "$SLICE/lib/" "$APP/python/lib/"
+if [ -d "$XCF/lib" ] && [ -d "$SLICE/lib-$ARCH" ]; then
+    # Format récent : partie commune (pur Python) + modules binaires propres à l'architecture.
+    echo "Bibliothèque commune + lib-$ARCH"
+    rsync -a --delete "$XCF/lib/" "$APP/python/lib/"
+    rsync -a "$SLICE/lib-$ARCH/" "$APP/python/lib/"
+elif ls "$SLICE/lib" 2>/dev/null | grep -q '^python3'; then
+    rsync -a --delete "$SLICE/lib/" "$APP/python/lib/"
+else
+    echo "error: bibliothèque standard introuvable dans $XCF (contenu :)"
+    find "$XCF" -maxdepth 2 | head -40
+    exit 1
+fi
 PYTHON_VER=$(ls -1 "$APP/python/lib" | grep '^python3' | head -1)
 echo "Bibliothèque standard : $PYTHON_VER"
 STDLIB="$APP/python/lib/$PYTHON_VER"
