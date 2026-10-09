@@ -1,0 +1,59 @@
+# Projet Xcode d'ADA'S (SwiftUI + moteur Python intégré).
+# Généré sur le Mac de GitHub avec XcodeGen : `xcodegen generate`.
+name: ADA
+options:
+  bundleIdPrefix: com.faxel
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "2.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  ADA:
+    type: application
+    platform: iOS
+    scheme: {}
+    sources:
+      - path: Sources
+      - path: Resources
+    dependencies:
+      - framework: Support/Python.xcframework
+        embed: true
+    info:
+      path: Generated/Info.plist
+      properties:
+        CFBundleDisplayName: "ADA'S"
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
+        ITSAppUsesNonExemptEncryption: false
+        UIBackgroundModes: [audio]
+        NSFaceIDUsageDescription: "ADA'S utilise Face ID pour protéger votre Coffre de morceaux privés."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.faxel.player
+        PRODUCT_NAME: ADA
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_OBJC_BRIDGING_HEADER: Sources/Bridge/ADA-Bridging-Header.h
+        HEADER_SEARCH_PATHS: ["$(inherited)", "$(BUILT_PRODUCTS_DIR)/Python.framework/Headers"]
+        FRAMEWORK_SEARCH_PATHS: ["$(inherited)", "$(PROJECT_DIR)/Support"]
+        ENABLE_USER_SCRIPT_SANDBOXING: NO
+        ENABLE_TESTABILITY: YES
+        CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER: NO
+        GCC_WARN_INHIBIT_ALL_WARNINGS: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ENABLE_BITCODE: NO
+        DEAD_CODE_STRIPPING: YES
+    postBuildScripts:
+      - name: Install Python
+        script: /bin/bash "$PROJECT_DIR/scripts/install_python.sh"
+        basedOnDependencyAnalysis: false
