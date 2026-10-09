@@ -157,13 +157,13 @@ jobs:
           {
             echo "## Test dans le simulateur"
             echo '```'
-            echo "${RESULT:-aucun résultat (l'app ne s'est pas lancée ou s'est arrêtée)}"
+            if [ -n "$RESULT" ]; then echo "$RESULT"; else echo "Aucun résultat : app non lancée ou arrêtée."; fi
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
           if echo "$RESULT" | grep -q '"ok":true'; then
             echo "::notice title=Simulateur::Python, yt-dlp et la recherche fonctionnent."
           else
-            echo "::error title=Simulateur::${RESULT:-L'app ne s'est pas lancée correctement}"
+            echo "::error title=Simulateur::Test raté : $RESULT"
             grep -a -E "Traceback|Error|error" ../selftest.log | tail -n 20 | while IFS= read -r line; do
               echo "::warning title=Journal::${line:0:900}"
             done
