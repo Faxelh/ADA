@@ -90,9 +90,6 @@ char *ada_python_start(const char *home, const char *paths) {
     config.write_bytecode = 0;
     config.install_signal_handlers = 1;
     config.module_search_paths_set = 1;
-#if defined(__APPLE__) && PY_VERSION_HEX >= 0x030D0000
-    config.use_system_logger = 1;
-#endif
 
     status = PyConfig_SetBytesString(&config, &config.home, home);
     if (PyStatus_Exception(status)) {
